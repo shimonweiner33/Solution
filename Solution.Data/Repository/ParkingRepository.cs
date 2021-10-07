@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 using Solution.Data.Models;
 using Solution.Data.Repository.Interface;
 using System;
@@ -12,9 +13,11 @@ namespace Solution.Data.Repository
 {
     class ParkingRepository : BaseRepository, IParkingRepository
     {
+        private readonly ILogger _logger;
+
         public ParkingRepository(IConfiguration configuration) : base(configuration)
         {
-
+            _logger = Log.ForContext<ParkingRepository>();
         }
         public async Task<bool> CheckIn(CheckInDetails input)
         {
@@ -54,12 +57,14 @@ namespace Solution.Data.Repository
                                     }, transaction);
                         transaction.Commit();
                     }
+                    _logger.Debug($"CheckIn ('{input}')  result={true}");
+
                     return true;
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                _logger.Error(ex, $"CheckIn('{input}')  failed");
                 throw ex;
             }
         }
@@ -76,12 +81,14 @@ namespace Solution.Data.Repository
                     conn.Open();
 
                     var affectedRowId = await conn.ExecuteScalarAsync(sQuery, new { licencePlateId = licencePlateId });
+                    _logger.Debug($"CheckOut ('{licencePlateId}')  result={affectedRowId}");
+
                     return true;
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                _logger.Error(ex, $"CheckOut('{licencePlateId}')  failed");
                 throw ex;
             }
         }
@@ -105,13 +112,14 @@ namespace Solution.Data.Repository
                     _params.Add("jsonResult", "", direction: ParameterDirection.Output);
                     var result = await conn.ExecuteAsync("GetVehiclesByTicketType", _params, commandType: CommandType.StoredProcedure);
                     var retVal = _params.Get<string>("jsonResult");
+                    _logger.Debug($"GetVehiclesByTicketType ('{ticketType}')  result={retVal}");
 
                     return retVal;
                 }
             }
             catch (Exception ex)
             {
-                return null;
+                _logger.Error(ex, $"GetVehiclesByTicketType('{ticketType}')  failed");
                 throw ex;
             }
         }

@@ -11,18 +11,18 @@ namespace Solution.Data.Models
         private TicketRegular TicketRegular { get; set; } = new TicketRegular();
         private TicketValue TicketValue { get; set; } = new TicketValue();
 
-        public TicketBase GetTicket(TicketType ticketype)
+        public TicketBase GetTicket(TicketTypes ticketype)
         {
             TicketBase ticket = null;
-            if (ticketype == TicketType.VIP)
+            if (ticketype == TicketTypes.VIP)
             {
                 ticket = TicketVIP;
             }
-            if (ticketype == TicketType.Value)
+            if (ticketype == TicketTypes.Value)
             {
                 ticket = TicketRegular;
             }
-            if (ticketype == TicketType.Regular)
+            if (ticketype == TicketTypes.Regular)
             {
                 ticket = TicketValue;
             }

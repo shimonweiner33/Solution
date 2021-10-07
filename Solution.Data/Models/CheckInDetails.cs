@@ -22,7 +22,7 @@ namespace Solution.Data.Models
         public string LicencePlateId { get; set; }
         public string Name { get; set; }
         public string Phone { get; set; }
-        public TicketType TicketType { get; set; }
+        public TicketTypes TicketType { get; set; }
         public int VehicleType { get; set; }
         public int VehicleHeight { get; set; }
         public int VehicleWidth { get; set; }

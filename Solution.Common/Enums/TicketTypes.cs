@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Solution.Common.Enums
 {
-    public enum TicketType
+    public enum TicketTypes
     {
         VIP = 1,
         Value = 2,

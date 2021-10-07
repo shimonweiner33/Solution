@@ -19,12 +19,12 @@ export class AuthenticationService {
     return this._currentUserSubject$.value;
   }
   updateCurrentUser() {
-    this.http.get('https://localhost:44353/api/Account/GetCurrentUser').subscribe((res: any) => {
+    this.http.get('https://localhost:44394/api/Account/GetCurrentUser').subscribe((res: any) => {
       this._currentUserSubject$.next(res);
     });
   }
   login(username: string, password: string) {
-    return this.http.post<any>(`https://localhost:44353/api/Account/Login`, { username, password },
+    return this.http.post<any>(`https://localhost:44394/api/Account/Login`, { username, password },
       { observe: 'response', withCredentials: true })
       .subscribe((data: any) => {
         if (data) {
@@ -43,7 +43,7 @@ export class AuthenticationService {
   }
   register(registerDetails: Register) {
 
-    return this.http.post<any>(`https://localhost:44353/api/Account/Register`, registerDetails,
+    return this.http.post<any>(`https://localhost:44394/api/Account/Register`, registerDetails,
       { observe: 'response', withCredentials: true })
       .subscribe((data: any) => {
         if (data) {
@@ -62,7 +62,7 @@ export class AuthenticationService {
 
   logout() {
 
-    // return this.http.post("https://localhost:44353/api/Account/Logout", null).subscribe((removedUserName: any) => {
+    // return this.http.post("https://localhost:44394/api/Account/Logout", null).subscribe((removedUserName: any) => {
     //   if (removedUserName) {
     //     this.hubsService._hubConnecton.invoke("RemoveConnectionId",removedUserName.toString());
 
@@ -74,7 +74,7 @@ export class AuthenticationService {
     // })
 
 
-    this.http.post<any>("https://localhost:44353/api/Account/Logout", null,
+    this.http.post<any>("https://localhost:44394/api/Account/Logout", null,
                         { observe: 'response', withCredentials: true })
      .subscribe((logout: any) => {
       // if (logout.body && !logout.body.error) {
