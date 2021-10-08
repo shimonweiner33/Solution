@@ -15,7 +15,9 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { HomeComponent } from './home/home.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { AuthenticationService } from './services/authentication.service';
 import { ParkingService } from './services/parking.service';
+
 
 
 
@@ -41,15 +43,18 @@ import { ParkingService } from './services/parking.service';
     ReactiveFormsModule,
     MatFormFieldModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'checkin', component: ParkingCheckInComponent, pathMatch: 'full' },
-      { path: 'checkout', component: ParkingCheckOutComponent, pathMatch: 'full' },
+      { path: '', redirectTo: 'app', pathMatch: 'full' },
+      { path: 'home', component: HomeComponent, pathMatch: 'full' },
+      { path: 'parking-check-in', component: ParkingCheckInComponent, pathMatch: 'full' },
+      { path: 'parking-check-out', component: ParkingCheckOutComponent, pathMatch: 'full' },
+      { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent },
       // { path: 'counter', component: CounterComponent },
       // { path: 'fetch-data', component: FetchDataComponent },
     ]),
     NoopAnimationsModule
   ],
-  providers: [ParkingService],
+  providers: [ParkingService, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

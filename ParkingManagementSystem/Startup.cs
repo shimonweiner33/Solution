@@ -5,8 +5,11 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Http;
 using Solution.Data;
 using Solution.Services;
+using Solution.Services.Constants;
+using System.Threading.Tasks;
 
 namespace ParkingManagementSystem
 {
@@ -22,6 +25,32 @@ namespace ParkingManagementSystem
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(AccountConst.AppCookie)
+                .AddCookie(AccountConst.AppCookie, options =>
+                {
+                    options.Cookie.Name = AccountConst.AppCookie;
+                    options.SlidingExpiration = true;
+                
+                    if (bool.Parse(Configuration["UseCookieSSL"]))
+                    {
+                        options.Cookie.HttpOnly = true;
+                        options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+                    }
+                    else
+                    {
+                        options.Cookie.HttpOnly = false;
+                    }
+                
+                    options.Events = new Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationEvents()
+                    {
+                        OnRedirectToLogin = context =>
+                        {
+                            context.Response.Clear();
+                            context.Response.StatusCode = 401;
+                            return Task.FromResult(0);
+                        }
+                    };
+                });
             services.AddControllersWithViews();
             //services.AddControllers();
             services.AddRepositories();
@@ -65,6 +94,10 @@ namespace ParkingManagementSystem
             }
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseCors("CorsPolicy");//
 
             app.UseEndpoints(endpoints =>
             {

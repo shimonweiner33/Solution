@@ -1,0 +1,38 @@
+body{
+    min-height: 881px;
+  }
+  /* .forum-page{
+    background-color: darkgoldenrod;
+  } */
+  .top-row{
+    background-color: #141414;
+  }
+  .main-title-frame{
+    display:flex;
+    justify-content: center;
+    font-family: fantasy;
+  }
+  .main-title-content {
+    margin-bottom: 0;
+    color: #dedede;
+  }
+  
+  .forum-frame{
+    display:flex;
+    min-height: 100vh;
+  }
+  /* .online-list{
+    width: 10%;
+  } */
+  /* .forum-body{
+    background-color: #141414;
+    padding: 40px;
+    border-radius: 0 0 45px 45px;  margin-bottom: 40px;
+  }
+
+  .forum-body-components{
+    width: 100%;
+  } */
+  
+
+  

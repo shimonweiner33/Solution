@@ -11,6 +11,8 @@ namespace Solution.Services
 
         public static IServiceCollection AddCommonServices(this IServiceCollection services)
         {
+            services.AddScoped<IMemberService, MemberService>();
+            services.AddScoped<IAcountService, AcountService>();
             services.AddSingleton<IParkingService, ParkingService>();
             services.AddSingleton<TicketFactory>();
             return services;

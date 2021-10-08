@@ -28,13 +28,9 @@ export class AuthenticationService {
       { observe: 'response', withCredentials: true })
       .subscribe((data: any) => {
         if (data) {
-          // if (data.body && data.body.isUserAuth) {
-            
-          //   this.hubsService.GetUserList();
-          //   this.hubsService._hubConnecton.invoke("UpdateConnectionId",username);
-            
-          //   this.isLogin = true;
-          // }
+          if (data.body && data.body.isUserAuth) {
+            this.isLogin = true;
+          }
           this._currentUserSubject$.next(data.body);
         }
       }, err => {
@@ -47,12 +43,9 @@ export class AuthenticationService {
       { observe: 'response', withCredentials: true })
       .subscribe((data: any) => {
         if (data) {
-          // if (data.body && data.body.isUserAuth) {
-          //   this.hubsService.GetUserList();
-          //   this.hubsService._hubConnecton.invoke("UpdateConnectionId",registerDetails.userName);
-
-          //   this.isLogin = true;
-          // }
+          if (data.body && data.body.isUserAuth) {
+            this.isLogin = true;
+          }
          this._currentUserSubject$.next(data.body);
         }
       }, err => {
@@ -62,33 +55,18 @@ export class AuthenticationService {
 
   logout() {
 
-    // return this.http.post("https://localhost:44394/api/Account/Logout", null).subscribe((removedUserName: any) => {
-    //   if (removedUserName) {
-    //     this.hubsService._hubConnecton.invoke("RemoveConnectionId",removedUserName.toString());
-
-    //     this.isLogin = false;
-    //   }
-    //   this._currentUserSubject$.next(null);
-    // }, err => {
-
-    // })
-
-
     this.http.post<any>("https://localhost:44394/api/Account/Logout", null,
                         { observe: 'response', withCredentials: true })
      .subscribe((logout: any) => {
-      // if (logout.body && !logout.body.error) {
-      //   let removedUserName = logout.body.userName;
-      //   this.hubsService._hubConnecton.invoke("RemoveConnectionId",removedUserName);
-      //   this.isLogin = this.isCookieExist();
-      // }
+      if (logout.body && !logout.body.error) {
+        this.isLogin = this.isCookieExist();
+      }
       this._currentUserSubject$.next(null);
 
     }, err => {
 
     })
   }
-
 
   // remove user from local storage to log user out
   //localStorage.removeItem('currentUser');

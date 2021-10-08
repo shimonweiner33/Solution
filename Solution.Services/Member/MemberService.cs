@@ -30,5 +30,14 @@ namespace Solution.Services
             }
             return null;
         }
+
+        public async Task<Member> GetMemberByUserName(string userName)
+        {
+            if (!string.IsNullOrEmpty(userName)){
+                var member = await memberRepository.GetMember(userName);
+                return member;
+            }
+            return null;
+        }
     }
 }

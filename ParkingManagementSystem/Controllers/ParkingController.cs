@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Solution.Common.Enums;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace ParkingManagementSystem.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ParkingController : ControllerBase
@@ -27,27 +29,6 @@ namespace ParkingManagementSystem.Controllers
             _ticketFactory = ticketFactory;
         }
 
-        //[HttpGet]
-        //public CheckInDetails Get(TicketTypes ticketType)
-        //{
-        //    //TicketCreator creator;
-        //    //creator = new TicketVipCreator();
-        //    //TicketBase ticketBase = creator.IsVehiclesDimensionsSuitableTicketType(34);
-        //    TicketBase ticketBase = _ticketFactory.GetTicket(ticketType);
-        //    if (!ticketBase.IsVehiclesDimensionsSuitableTicketType(1, 2, 3))
-        //    {
-        //        ticketBase = _ticketFactory.GetCorrectTicket(1, 2, 3);
-        //    }
-        //    return new CheckInDetails()
-        //    {
-        //        Name = "ssssss"
-        //    };
-        //}
-        //[HttpGet, Route("CheckIn2")]
-        //public async Task<bool> CheckIn2()
-        //{
-        //    return true;
-        //}
         /// <summary>
         /// This function target to check-in the vehicle.
         /// Checks whether the vehicles dimensions are suitable with the TicketType. 

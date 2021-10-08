@@ -1,10 +1,51 @@
 <div>
-  <app-nav-menu></app-nav-menu>
-
+  <!-- <app-nav-menu></app-nav-menu> -->
   
-  <app-parking-check-out></app-parking-check-out>
+  <!-- <div class="top-row">
+    <div class="main-title-frame">
+      <div class="main-title-content large-title">{{title}}</div>
+    </div>
+  </div> -->
 
-  <div *ngFor="let type of types">
-    <img (src)="type.img" />
+  <div>
+    
+    <!-- <app-nav-menu></app-nav-menu> -->
+
+    <div class="forum-frame">
+      <div>
+        <!-- <h6>{{(logInUsersList.length > 0 && authenticationService.isLogin)?'Users online':'No users online'}}</h6>
+        <ul *ngIf="authenticationService.isLogin">
+          <li *ngFor="let user of logInUsersList">
+            <div (click)="addUserToRoom(user)">{{user.firstName}} {{user.lastName}}</div>
+        </ul> -->
+      </div>
+      <!-- <div class="forum-body">
+        <router-outlet class="forum-body-components"></router-outlet>
+      </div> -->
+
+      <!-- <form class="room-users" [formGroup]="roomFormGroup"
+        *ngIf="roomFormGroup.value.users && roomFormGroup.value.users.length && authenticationService.isLogin">
+        <label class="small-title">Private Room</label>
+        <label class="small-title">
+          Add room name:
+          <input type="text" formControlName="roomName" class="form-field room-name">
+        </label>
+        <div class="user" *ngFor="let addedUser of roomFormGroup.value.users">
+          {{addedUser.firstName}} {{addedUser.lastName}}
+        </div>
+        <div class="room-btn">
+          <button class="btn-room-cancel btn-primary" (click)="cancelRoom()" *ngIf="roomsService.openDialogAdd">
+            Cancel
+          </button>
+          <button class="btn-room-save btn-primary" (click)="addRoom()">Save</button>
+        </div>
+      </form> -->
+    </div>
   </div>
+  
+  <!-- <app-parking-check-out></app-parking-check-out> -->
+
+  <!-- <div *ngFor="let type of types">
+    <img (src)="type.img" />
+  </div> -->
 </div>

@@ -28,13 +28,22 @@
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']"
-              >Counter</a
+            <a class="nav-link text-dark" [routerLink]="['/login']"
+              >Login</a
+            >
+          <li class="nav-item" *ngIf="authenticationService.isLogin" (click)="logout()">
+            <a class="nav-link text-dark" 
+              >Logout</a
+            >
+
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/parking-check-in']"
+              >CheckIn</a
             >
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']"
-              >Fetch data</a
+            <a class="nav-link text-dark" [routerLink]="['/parking-check-out']"
+              >CheckOut</a
             >
           </li>
         </ul>

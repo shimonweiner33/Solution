@@ -49,7 +49,7 @@ namespace ParkingManagementSystem.Controllers
                     return Ok(loginResult);
                 }
                 await SignInUser(login, member);
-                loginResult.Member = new ExtendMember()
+                loginResult.Member = new Member()
                 {
                     UserName = member.UserName,
                     FirstName = member.FirstName,
@@ -134,25 +134,29 @@ namespace ParkingManagementSystem.Controllers
 
             await HttpContext.SignInAsync(AccountConst.AppCookie, new ClaimsPrincipal(claimsIdentity), authenticationProperties);
         }
-        //[HttpGet, Route("GetCurrentUser")]
-        //public async Task<LoginResultModel> GetCurrentUser()
-        //{
-        //    ExtendMember extendMember = null;
-        //    LoginResultModel loginResult = null;
-        //    try
-        //    {
-        //        string userName = User.Identity.Name;
+        [HttpGet, Route("GetCurrentUser")]
+        public async Task<LoginResultModel> GetCurrentUser()
+        {
+            Member member = null;
+            LoginResultModel loginResult = null;
+            try
+            {
+                string userName = User.Identity.Name;
+                if (userName != null)
+                {
+                    member = await _memberService.GetMemberByUserName(userName);
+                }
 
-        //        loginResult = new LoginResultModel();
+                loginResult = new LoginResultModel();
 
-        //        loginResult.Member = extendMember;
-        //        loginResult.IsUserAuth = true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _logger.Information($"CheckOut ('{licencePlateId}') update => {result}");
-        //    }
-        //    return loginResult;
-        //}
+                loginResult.Member = member;
+                loginResult.IsUserAuth = true;
+            }
+            catch (Exception e)
+            {
+                //log
+            }
+            return loginResult;
+        }
     }
 }
