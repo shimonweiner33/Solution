@@ -19,7 +19,7 @@ export class NavMenuComponent {
   }
   constructor( private router: Router, private authenticationService: AuthenticationService) {
     if (this.authenticationService.isLogin) {
-      this.router.navigate(['/home', 1]);
+      this.router.navigate(['/home']);
     }
     else {
       this.router.navigate(['/login']);

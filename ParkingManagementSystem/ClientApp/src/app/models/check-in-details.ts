@@ -1,4 +1,4 @@
-class CheckInDetails {
+export class CheckInDetails {
     licencePlateId: string;
     name: string;
     phone: string;
@@ -8,3 +8,8 @@ class CheckInDetails {
     vehicleWidth: number;
     vehicleLength: number;
 }
+
+export class Vehicles{
+    vehicles : CheckInDetails[]
+}
+

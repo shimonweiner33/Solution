@@ -12,7 +12,6 @@ export class ParkingCheckOutComponent implements OnInit {
 
 constructor(private parkingService: ParkingService) { }
   ngOnInit() {
-    console.log(this.parkingService.showAll());
     this.parkingControl = new FormControl('', Validators.required);
   }
 

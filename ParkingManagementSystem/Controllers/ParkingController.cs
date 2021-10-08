@@ -89,7 +89,7 @@ namespace ParkingManagementSystem.Controllers
         /// <summary>
         /// This function Gets the Vehicles list By TicketType.
         /// </summary>
-        /// <param name="ticketType">ticketType use to filter vehicles int Vehicles-Table</param>
+        /// <param name="ticketType">ticketType use to filter vehicles int Vehicles-Table. if null => return all</param>
         /// <returns>Result - the model asked as string</returns>
         [HttpGet, Route("GetVehiclesByTicketType")]
         public async Task<string> GetVehiclesByTicketType(int? ticketType)
