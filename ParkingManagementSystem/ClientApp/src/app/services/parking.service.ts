@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CheckInDetails, Vehicles } from '../models/check-in-details';
+import { CheckInDetails } from '../models/check-in-details';
+import { Vehicles } from '../models/vehicle';
 
 @Injectable({
   providedIn: 'root'

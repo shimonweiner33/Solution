@@ -1,22 +1,28 @@
 <div>
   <form [formGroup]="parkingForm">
     <div>
-      <label for="first-name">לוחית רישוי: </label>
-      <input id="first-name" type="text" formControlName="licencePlateId">
+      <label>Licence plate Id:</label>
+      <mat-form-field appearance="fill" formControlName="licencePlateId">
+        <input matInput >
+      </mat-form-field>
     </div>
 
     <div>
-      <label for="last-name">שם: </label>
-      <input id="last-name" type="text" formControlName="name">
+      <label>Name:</label>
+      <mat-form-field appearance="fill" formControlName="name">
+        <input matInput >
+      </mat-form-field>
     </div>
 
     <div>
-      <label for="last-name">טלפון: </label>
-      <input id="last-name" type="text" formControlName="phone">
+      <label>Phone:</label>
+      <mat-form-field appearance="fill" formControlName="phone">
+        <input matInput >
+      </mat-form-field>
     </div>
     
     <div>
-        <label for="last-name">סוג כרטיס: </label>
+        <label>Ticket type: </label>
         <mat-select formControlName="ticketType" placeholder="סוג כרטיס">
           <mat-option *ngFor="let type of ticketTypes; let index=index" [value]="index">
             {{ type }}
@@ -25,7 +31,7 @@
     </div>
 
     <div>
-        <label for="last-name">סוג רכב: </label>
+        <label>Vehicle type:</label>
         <mat-select formControlName="vehicleType" placeholder="סוג רכב">
           <mat-option *ngFor="let type of vehicleTypes; let index=index" [value]="index">
             {{ type }}
@@ -34,20 +40,26 @@
     </div>
 
     <div>
-      <label for="last-name">גובה: </label>
-      <input id="last-name" type="number" formControlName="vehicleHeight">
+      <label>Height:</label>
+      <mat-form-field appearance="fill" formControlName="vehicleHeight">
+        <input type="number" matInput >
+      </mat-form-field>
     </div>
 
     <div>
-      <label for="last-name">משקל: </label>
-      <input id="last-name" type="number" formControlName="vehicleWidth">
+      <label>Width:</label>
+      <mat-form-field appearance="fill" formControlName="vehicleWidth">
+        <input type="number" matInput >
+      </mat-form-field>
     </div>
 
     <div>
-      <label for="last-name">אורך: </label>
-      <input id="last-name" type="number" formControlName="vehicleLength">
+      <label>Length:</label>
+      <mat-form-field appearance="fill" formControlName="vehicleLength">
+        <input type="number" matInput >
+      </mat-form-field>
     </div>
 
-    <div (click)="save()">שמור</div>
+    <div (click)="save()">Save</div>
   </form>
 </div>

@@ -8,8 +8,3 @@ export class CheckInDetails {
     vehicleWidth: number;
     vehicleLength: number;
 }
-
-export class Vehicles{
-    vehicles : CheckInDetails[]
-}
-

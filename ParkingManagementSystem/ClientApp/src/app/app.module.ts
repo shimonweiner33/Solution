@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatOptionModule, MatSelectModule } from '@angular/material';
+import { MatGridListModule, MatOptionModule, MatSelectModule } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -42,6 +42,7 @@ import { ParkingService } from './services/parking.service';
     MatSelectModule,
     ReactiveFormsModule,
     MatFormFieldModule,
+    MatGridListModule,
     RouterModule.forRoot([
       { path: '', redirectTo: 'app', pathMatch: 'full' },
       { path: 'home', component: HomeComponent, pathMatch: 'full' },

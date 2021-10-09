@@ -23,20 +23,54 @@ namespace Solution.Data.Repository
         {
             try
             {
-                var sQuery = string.Format(@"                           
+                var sQuery = string.Format(@"
                                 DECLARE @capacity INT
-                                SET @capacity = (select {0} from ParkingLots)
+                                SET @capacity = (select {0} from Params)
+                                DECLARE @minLot INT
+                                SET @minLot = (select {1} from Params)
+                                DECLARE @maxLot INT
+                                SET @maxLot = (select {2} from Params)
+                                
+                                DROP TABLE IF EXISTS #Temp
+
+                                CREATE TABLE #Temp
+                                (
+                                    LotNumber int
+                                )
+                                INSERT INTO #Temp
+                                SELECT LotNumber FROM ParkingLots WHERE TicketType = @ticketType
+                                ---------------
+                                DECLARE @lot INT;
+                                SET @lot = @minLot;
+                                
+                                DECLARE @lotFound BIT;
+                                SET @lotFound = 0;
+                                
+                                WHILE @lot <= @maxLot AND @lotFound = 0
+                                BEGIN
+                                   IF(@lot NOT IN (select LotNumber from #Temp))
+                                		BEGIN
+                                				PRINT @lot
+                                				SET @lotFound = 1
+                                		END
+                                   ELSE
+                                		BEGIN
+                                				SET @lot = @lot + 1;
+                                		END
+                                END;
+
+
                                 DECLARE @occupy INT
-                                SET @occupy = (select count(LicencePlateId) from Vehicles where TicketType = @ticketType)
+                                SET @occupy = (select count(LicencePlateId) from ParkingLots where TicketType = @ticketType)
 
                                 IF(@capacity > @occupy AND 
-                                    NOT EXISTS (SELECT * FROM Vehicles WHERE LicencePlateId = @licencePlateId)
+                                    NOT EXISTS (SELECT * FROM ParkingLots WHERE LicencePlateId = @licencePlateId)
                                 )
                                 BEGIN
-                                      INSERT INTO Vehicles(LicencePlateId, Name, Phone, TicketType, VehicleType, VehicleHeight, VehicleWidth, VehicleLength)
-                                      VALUES(@licencePlateId, @name, @phone, @ticketType, @vehicleType, @vehicleHeight, @vehicleLength, @vehicleWidth);
+                                      INSERT INTO ParkingLots(LicencePlateId, Name, Phone, TicketType, VehicleType, VehicleHeight, VehicleWidth, VehicleLength, LotNumber)
+                                      VALUES(@licencePlateId, @name, @phone, @ticketType, @vehicleType, @vehicleHeight, @vehicleLength, @vehicleWidth, @lot);
                                 END 
-                                ", input.TicketType + "Capacity");
+                                ", input.TicketType + "Capacity", input.TicketType + "MinLot", input.TicketType + "MaxLot");
 
                 using (IDbConnection conn = Connection)
                 {
@@ -74,7 +108,7 @@ namespace Solution.Data.Repository
         {
             try
             {
-                var sQuery = @"DELETE FROM Vehicles WHERE LicencePlateId = @licencePlateId";
+                var sQuery = @"DELETE FROM ParkingLots WHERE LicencePlateId = @licencePlateId";
 
                 using (IDbConnection conn = Connection)
                 {
@@ -93,10 +127,10 @@ namespace Solution.Data.Repository
             }
         }
         /// <summary>
-        /// This function Gets the Vehicles list By TicketType.
+        /// This function Gets the Vehicles list from the ParkingLots By TicketType.
         /// </summary>
-        /// <param name="ticketType">use to filter vehicles in Vehicles-Table.</param>
-        /// <returns>vehicles list filter by ticketType. if ticketType is null => return all the Vehicles</returns>
+        /// <param name="ticketType">use to filter vehicles in ParkingLots-Table.</param>
+        /// <returns>the vehicles list that parking in the ParkingLots filter by ticketType. if ticketType is null => return all the Vehicles</returns>
         public async Task<string> GetVehiclesByTicketType(int? ticketType)
         {
             try

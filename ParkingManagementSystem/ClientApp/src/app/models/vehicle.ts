@@ -1,4 +1,9 @@
-class Vehicle {
-    name: string;
-    _id?: string;
+import { CheckInDetails } from "./check-in-details";
+
+export class Vehicles{
+    vehicles : CheckInDetails[]
+    
+    constructor(){
+        this.vehicles = [];
+    }
 }
