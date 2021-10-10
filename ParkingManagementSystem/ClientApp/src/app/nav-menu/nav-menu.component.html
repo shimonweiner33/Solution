@@ -27,11 +27,11 @@
           >
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
+          <li class="nav-item" *ngIf="!authenticationService.isLogin" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/login']"
               >Login</a
             >
-          <li class="nav-item" *ngIf="authenticationService.isLogin" (click)="logout()">
+          <li class="nav-item pointer" *ngIf="authenticationService.isLogin" (click)="logout()">
             <a class="nav-link text-dark" 
               >Logout</a
             >

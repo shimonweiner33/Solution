@@ -30,6 +30,29 @@ namespace ParkingManagementSystem.Controllers
         }
 
         /// <summary>
+        /// This function Gets the Vehicles list By TicketType.
+        /// </summary>
+        /// <param name="ticketType">ticketType use to filter vehicles int Vehicles-Table. if null => return all</param>
+        /// <returns>Result - the model asked as string</returns>
+        [HttpGet, Route("GetVehiclesByTicketType")]
+        public async Task<string> GetVehiclesByTicketType(int? ticketType)
+        {
+            string result = string.Empty;
+
+            try
+            {
+                result = await _parkingService.GetVehiclesByTicketTypeJson(ticketType);
+                _logger.Information($"GetVehiclesByTicketType ('{ticketType}') Vehicles list => {result}");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"GetVehiclesByTicketType ('{ticketType}') failed  => exception:{ex.Message}");
+                return result;
+            }
+            return result;
+        }
+
+        /// <summary>
         /// This function target to check-in the vehicle.
         /// Checks whether the vehicles dimensions are suitable with the TicketType. 
         /// if yes -> a parking lot assigned to the vehicle. if not -> return the appropriate TicketType.
@@ -86,27 +109,6 @@ namespace ParkingManagementSystem.Controllers
         }
 
 
-        /// <summary>
-        /// This function Gets the Vehicles list By TicketType.
-        /// </summary>
-        /// <param name="ticketType">ticketType use to filter vehicles int Vehicles-Table. if null => return all</param>
-        /// <returns>Result - the model asked as string</returns>
-        [HttpGet, Route("GetVehiclesByTicketType")]
-        public async Task<string> GetVehiclesByTicketType(int? ticketType)
-        {
-            string result = string.Empty;
 
-            try
-            {
-                result = await _parkingService.GetVehiclesByTicketTypeJson(ticketType);
-                _logger.Information($"GetVehiclesByTicketType ('{ticketType}') Vehicles list => {result}");
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, $"GetVehiclesByTicketType ('{ticketType}') failed  => exception:{ex.Message}");
-                return result;
-            }
-            return result;
-        }
     }
 }

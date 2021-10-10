@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Solution.Data.Repository
 {
-    class ParkingRepository : BaseRepository, IParkingRepository
+    public class ParkingRepository : BaseRepository, IParkingRepository
     {
         private readonly ILogger _logger;
 
@@ -19,6 +19,9 @@ namespace Solution.Data.Repository
         {
             _logger = Log.ForContext<ParkingRepository>();
         }
+
+
+
         public async Task<bool> CheckIn(CheckInDetails input)
         {
             try
