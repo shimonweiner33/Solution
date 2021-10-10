@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Solution.Data.Models
 {
@@ -11,7 +12,7 @@ namespace Solution.Data.Models
         private TicketRegular TicketRegular { get; set; } = new TicketRegular();
         private TicketValue TicketValue { get; set; } = new TicketValue();
 
-        public TicketBase GetTicket(TicketTypes ticketype)
+        public async Task<TicketBase> GetTicket(TicketTypes ticketype)
         {
             TicketBase ticket = null;
             if (ticketype == TicketTypes.VIP)
@@ -20,16 +21,16 @@ namespace Solution.Data.Models
             }
             if (ticketype == TicketTypes.Value)
             {
-                ticket = TicketRegular;
+                ticket = TicketValue;
             }
             if (ticketype == TicketTypes.Regular)
             {
-                ticket = TicketValue;
+                ticket = TicketRegular;
             }
             return ticket;
         }
 
-        public TicketBase GetCorrectTicket(int vehicleHeight, int vehicleWidth, int vehicleLength)
+        public async Task<TicketBase> GetCorrectTicket(int vehicleHeight, int vehicleWidth, int vehicleLength)
         {
             TicketBase ticket = null;
 

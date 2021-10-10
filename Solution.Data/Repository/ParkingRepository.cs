@@ -24,9 +24,7 @@ namespace Solution.Data.Repository
 
         public async Task<bool> CheckIn(CheckInDetails input)
         {
-            try
-            {
-                var sQuery = string.Format(@"
+            var sQuery = string.Format(@"
                                 DECLARE @capacity INT
                                 SET @capacity = (select {0} from Params)
                                 DECLARE @minLot INT
@@ -75,34 +73,38 @@ namespace Solution.Data.Repository
                                 END 
                                 ", input.TicketType + "Capacity", input.TicketType + "MinLot", input.TicketType + "MaxLot");
 
-                using (IDbConnection conn = Connection)
+            using (IDbConnection conn = Connection)
+            {
+                conn.Open();
+                using (var transaction = conn.BeginTransaction())
                 {
-                    conn.Open();
-                    using (var transaction = conn.BeginTransaction())
+                    try
                     {
                         var affectedRowId = await conn.ExecuteScalarAsync(sQuery,
-                                    new
-                                    {
-                                        licencePlateId = input.LicencePlateId,
-                                        name = input.Name,
-                                        phone = input.Phone,
-                                        ticketType = ((int)(input.TicketType)),
-                                        vehicleType = input.VehicleType,
-                                        vehicleHeight = input.VehicleHeight,
-                                        vehicleLength = input.VehicleLength,
-                                        vehicleWidth = input.VehicleWidth
-                                    }, transaction);
+                                new
+                                {
+                                    licencePlateId = input.LicencePlateId,
+                                    name = input.Name,
+                                    phone = input.Phone,
+                                    ticketType = ((int)(input.TicketType)),
+                                    vehicleType = input.VehicleType,
+                                    vehicleHeight = input.VehicleHeight,
+                                    vehicleLength = input.VehicleLength,
+                                    vehicleWidth = input.VehicleWidth
+                                }, transaction);
                         transaction.Commit();
                     }
-                    _logger.Debug($"CheckIn ('{input}')  result={true}");
+                    catch (Exception ex)
+                    {
+                        _logger.Error(ex, $"CheckIn('{input}')  failed");
 
-                    return true;
+                        transaction.Rollback();
+                        throw;
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, $"CheckIn('{input}')  failed");
-                throw ex;
+                _logger.Debug($"CheckIn ('{input}')  result={true}");
+
+                return true;
             }
         }
 

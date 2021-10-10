@@ -27,5 +27,6 @@ namespace Solution.Data.Models
         public int VehicleHeight { get; set; }
         public int VehicleWidth { get; set; }
         public int VehicleLength { get; set; }
+        public int? LotNumber { get; set; }
     }
 }

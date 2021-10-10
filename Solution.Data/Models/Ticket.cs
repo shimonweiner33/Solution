@@ -17,7 +17,7 @@ namespace Solution.Data.Models
 
         public virtual bool IsVehiclesDimensionsSuitableTicketType(int vehicleHeight, int vehicleWidth, int vehicleLength)
         {
-            if (this.Height > vehicleHeight && this.Width > vehicleWidth && this.Length > vehicleLength) return true;
+            if (this.Height >= vehicleHeight && this.Width >= vehicleWidth && this.Length >= vehicleLength) return true;
             return false;
         }
     }

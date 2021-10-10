@@ -66,10 +66,10 @@ namespace ParkingManagementSystem.Controllers
 
             try
             {
-                TicketBase ticketBase = _ticketFactory.GetTicket(input.TicketType);
+                TicketBase ticketBase = await _ticketFactory.GetTicket(input.TicketType);
                 if (!ticketBase.IsVehiclesDimensionsSuitableTicketType(input.VehicleHeight, input.VehicleWidth, input.VehicleLength))
                 {
-                    ticketBase = _ticketFactory.GetCorrectTicket(input.VehicleHeight, input.VehicleWidth, input.VehicleLength);
+                    ticketBase = await _ticketFactory.GetCorrectTicket(input.VehicleHeight, input.VehicleWidth, input.VehicleLength);
                 }
                 else
                 {
@@ -107,8 +107,5 @@ namespace ParkingManagementSystem.Controllers
             }
             return result;
         }
-
-
-
     }
 }

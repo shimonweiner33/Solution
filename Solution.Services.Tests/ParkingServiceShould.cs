@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using Microsoft.Extensions.Configuration;
+using Solution.Data.Repository.Interface;
+using Solution.Common.Enums;
+
 namespace Solution.Services.Tests
 {
 
@@ -14,16 +17,13 @@ namespace Solution.Services.Tests
     /// </summary>
     public class ParkingServiceShould : BaseTest
     {
-        private readonly IParkingService _parkingService;
-        private readonly IConfiguration _configuration;
         public ParkingServiceShould()
         {
-            _parkingService = new ParkingService(new ParkingRepository(Configuration));
         }
 
         /// <summary>
         /// Tests if the Vehicles list were returned from ParkingLots table by order.
-        /// if TicketType is not null => The expected result is all the Vehicles that parking now in the parking-lot with spesific TicketType. 
+        /// if TicketType is not null => The expected result is all the Vehicles that parking now in the parking-lot with specific TicketType. 
         /// if TicketType is null => The expected result is all the Vehicles that parking now in the parking-lot.
         /// </summary>
         [Theory]
@@ -36,8 +36,14 @@ namespace Solution.Services.Tests
             // Act
             try
             {
+                actualResult = await _parkingService.CheckIn(testDataInfo.Data);
+                Assert.True(actualResult);
+
                 resultData = await _parkingService.GetVehiclesByTicketType(testDataInfo.TicketType);
                 actualResult = resultData.Items != null && resultData.Items.Count > 0;
+
+                actualResult = await _parkingService.CheckOut(testDataInfo.Data.LicencePlateId);
+                Assert.True(actualResult);
             }
             catch
             {
@@ -50,32 +56,114 @@ namespace Solution.Services.Tests
 
         /// <summary>
         /// Tests if check in vehicle will success.
-        /// The result is integer number. when actualResult > expectedNotResult - the post would be fully created or updated.  in Posts - table.
+        /// The result is true if success. else result is false.
         /// </summary>
-        //[Theory]
-        //[MemberData(nameof(ParkingInlineTestData.TestData_Check_In_DataValid), MemberType = typeof(PostsInlineTestData))]
-        //public async void CheckIn_AddVehicleToParkingLots(CheckInDetailsInlineTestDataInfo testDataInfo)
-        //{
-        //    // Arrange
+        [Theory]
+        [MemberData(nameof(ParkingInlineTestData.TestData_Check_In_DataValid), MemberType = typeof(ParkingInlineTestData))]
+        public async void CheckInCheckOn_AddAndSubtractVehicleFromParkingLots(CheckInDetailsInlineTestDataInfo testDataInfo)
+        {
+            // Arrange
 
-        //    int actualResult = 0;
+            bool actualResult = false;
 
-        //    // Act
-        //    try
-        //    {
-        //        actualResult = await _parkingService.CreateOrUpdatePost(testDataInfo.Data);
-        //    }
-        //    catch
-        //    {
-        //        actualResult = 0;
-        //    }
-        //    finally
-        //    {
-        //        // need to Rollback;
-        //    }
-        //    Assert.True(testDataInfo.ExpectedNotResult < actualResult);
-        //}
+            // Act
+            try
+            {
+                TicketBase ticketBase = await _ticketFactory.GetTicket(testDataInfo.Data.TicketType);
+                Assert.NotNull(ticketBase);
 
+                if (!ticketBase.IsVehiclesDimensionsSuitableTicketType(testDataInfo.Data.VehicleHeight, testDataInfo.Data.VehicleWidth, testDataInfo.Data.VehicleLength))
+                {
+                    actualResult = false;
+                }
+                else
+                {
+                    actualResult = await _parkingService.CheckIn(testDataInfo.Data);
+                    Assert.True(actualResult);
+                    actualResult = await _parkingService.CheckOut(testDataInfo.Data.LicencePlateId);
+                }
+            }
+            catch
+            {
+                actualResult = false;
+            }
+            finally
+            {
+                // need to Rollback;
+            }
+            Assert.Equal(testDataInfo.ExpectedResult, actualResult);
+        }
+        /// <summary>
+        /// Tests if check in vehicle will fail with invalid data. The data does not match the rules of the TicketType
+        /// The result is true if the data not match the rules. else result is false.
+        /// </summary>
+        [Theory]
+        [MemberData(nameof(ParkingInlineTestData.TestData_Check_In_DataInValid), MemberType = typeof(ParkingInlineTestData))]
+        public async void CheckIn_NotAddVehicleToParkingLots(CheckInDetailsInlineTestDataInfo testDataInfo)
+        {
+            // Arrange
+
+            bool actualResult = false;
+
+            // Act
+            try
+            {
+                TicketBase ticketBase = await _ticketFactory.GetTicket(testDataInfo.Data.TicketType);
+                Assert.NotNull(ticketBase);
+
+                if (!ticketBase.IsVehiclesDimensionsSuitableTicketType(testDataInfo.Data.VehicleHeight, testDataInfo.Data.VehicleWidth, testDataInfo.Data.VehicleLength))
+                {
+                    ticketBase = await _ticketFactory.GetCorrectTicket(testDataInfo.Data.VehicleHeight, testDataInfo.Data.VehicleWidth, testDataInfo.Data.VehicleLength);
+                    Assert.NotNull(ticketBase);
+                    actualResult = true;
+                }
+            }
+            catch
+            {
+                actualResult = false;
+            }
+            finally
+            {
+                // need to Rollback;
+            }
+            Assert.Equal(testDataInfo.ExpectedResult, actualResult);
+        }
+
+
+        /// <summary>
+        /// Checks the functionality of the GetTicket and IsVehiclesDimensionsSuitableTicketType functions is correct.
+        /// The result is true if the functionality is correct. else result is false.
+        /// </summary>
+        [Fact]
+        public async void ChecksFunctionality()
+        {
+            bool actualResult = false;
+
+            try
+            {
+                TicketBase ticketVIP = await _ticketFactory.GetTicket(TicketTypes.VIP);
+                Assert.NotNull(ticketVIP);
+                Assert.True(ticketVIP.IsVehiclesDimensionsSuitableTicketType(8000, 8000, 8000));
+
+                TicketBase ticketValue = await _ticketFactory.GetTicket(TicketTypes.Value);
+                Assert.NotNull(ticketValue);
+                Assert.True(ticketValue.IsVehiclesDimensionsSuitableTicketType(2500, 2400, 5000));
+
+                TicketBase ticketRegular = await _ticketFactory.GetTicket(TicketTypes.Regular);
+                Assert.NotNull(ticketRegular);
+                Assert.True(ticketRegular.IsVehiclesDimensionsSuitableTicketType(2000, 2000, 3000));
+
+                actualResult = true;
+            }
+            catch
+            {
+                actualResult = false;
+            }
+            finally
+            {
+                // need to Rollback;
+            }
+            Assert.True(actualResult);
+        }
     }
-
 }

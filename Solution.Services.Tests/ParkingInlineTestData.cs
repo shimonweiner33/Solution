@@ -11,11 +11,33 @@ namespace Solution.Services.Tests
         private static readonly List<ParkingGetAllInlineTestDataInfo> _getVehiclesByTicketType = new List<ParkingGetAllInlineTestDataInfo>()
         {
             new ParkingGetAllInlineTestDataInfo() {
-                TicketType = 3,
-                ExpectedResult = false
+                TicketType = 1,
+                Data = new CheckInDetails()
+                {
+                    LicencePlateId = "9111111",
+                    Name = "David",
+                    Phone = "0545888888",
+                    TicketType = TicketTypes.VIP,
+                    VehicleHeight = 8000,
+                    VehicleLength = 8000,
+                    VehicleWidth = 8000,
+                    VehicleType = VehicleTypes.Motorcycle
+                },
+                ExpectedResult = true
             },
             new ParkingGetAllInlineTestDataInfo() {
                 TicketType = null,
+                Data = new CheckInDetails()
+                {
+                    LicencePlateId = "9111111",
+                    Name = "David",
+                    Phone = "0545888888",
+                    TicketType = TicketTypes.VIP,
+                    VehicleHeight = 8000,
+                    VehicleLength = 8000,
+                    VehicleWidth = 8000,
+                    VehicleType = VehicleTypes.Motorcycle
+                },
                 ExpectedResult = true
             },
         };
@@ -33,7 +55,7 @@ namespace Solution.Services.Tests
                           VehicleWidth = 8000,
                           VehicleType = VehicleTypes.Motorcycle
                        },
-                       ExpectedNotResult = 0
+                       ExpectedResult = true
                  },
                 new CheckInDetailsInlineTestDataInfo() {
                        Data = new CheckInDetails
@@ -47,7 +69,7 @@ namespace Solution.Services.Tests
                           VehicleWidth = 1000,
                           VehicleType = VehicleTypes.Private
                        },
-                       ExpectedNotResult = 0
+                       ExpectedResult = true
                 },
                 new CheckInDetailsInlineTestDataInfo() {
                        Data = new CheckInDetails
@@ -61,7 +83,7 @@ namespace Solution.Services.Tests
                           VehicleLength = 4000,
                           VehicleType = VehicleTypes.Crossover
                        },
-                       ExpectedNotResult = 0
+                       ExpectedResult = true
                  },
                  new CheckInDetailsInlineTestDataInfo() {
                        Data = new CheckInDetails
@@ -75,22 +97,39 @@ namespace Solution.Services.Tests
                           VehicleWidth = 2000,
                           VehicleType = VehicleTypes.SUV
                        },
-                       ExpectedNotResult = 0
+                       ExpectedResult = true
                  },
-                 new CheckInDetailsInlineTestDataInfo() {
+        };
+        private static readonly List<CheckInDetailsInlineTestDataInfo> _checkInDataInValid = new List<CheckInDetailsInlineTestDataInfo>()
+        {
+                new CheckInDetailsInlineTestDataInfo() {
                        Data = new CheckInDetails
                        {
-                          LicencePlateId = "5111111",
-                          Name = "Kfir",
-                          Phone = "0545555555",
+                          LicencePlateId = "9111111",
+                          Name = "David",
+                          Phone = "0545888888",
                           TicketType = TicketTypes.Regular,
                           VehicleHeight = 8000,
                           VehicleLength = 8000,
                           VehicleWidth = 8000,
-                          VehicleType = VehicleTypes.Van
+                          VehicleType = VehicleTypes.Motorcycle
                        },
-                       ExpectedNotResult = 0
+                       ExpectedResult = true
                  },
+                new CheckInDetailsInlineTestDataInfo() {
+                       Data = new CheckInDetails
+                       {
+                          LicencePlateId = "8111111",
+                          Name = "Netanel",
+                          Phone = "0525888888",
+                          TicketType = TicketTypes.Value,
+                          VehicleHeight = 7000,
+                          VehicleLength = 7000,
+                          VehicleWidth = 7000,
+                          VehicleType = VehicleTypes.Private
+                       },
+                       ExpectedResult = true
+                }
         };
 
         public static IEnumerable<object[]> GetVehiclesByTicketType
@@ -109,16 +148,25 @@ namespace Solution.Services.Tests
                     yield return new object[] { v };
             }
         }
+        public static IEnumerable<object[]> TestData_Check_In_DataInValid
+        {
+            get
+            {
+                foreach (var v in _checkInDataInValid)
+                    yield return new object[] { v };
+            }
+        }
     }
 
     public class ParkingGetAllInlineTestDataInfo
     {
         public int? TicketType { get; set; }
+        public CheckInDetails Data { get; set; }
         public bool ExpectedResult { get; set; }
     }
     public class CheckInDetailsInlineTestDataInfo
     {
         public CheckInDetails Data { get; set; }
-        public int ExpectedNotResult { get; set; }
+        public bool ExpectedResult { get; set; }
     }
 }
