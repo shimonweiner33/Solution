@@ -15,6 +15,7 @@ export class ParkingService {
   constructor(private http: HttpClient) { }
 
   checkIn(checkInDetails: CheckInDetails) {
+    console.log("licencePlateId = " + checkInDetails.licencePlateId)
     return this.http.post<any>(`https://localhost:44394/Parking/CheckIn`, checkInDetails,
       { observe: 'response', withCredentials: true })
       .subscribe((data: any) => {
@@ -51,7 +52,11 @@ export class ParkingService {
   //     })
   // }
 
-
+  // updateCurrentUser() {
+  //   this.http.get('https://localhost:44353/api/Account/GetCurrentUser').subscribe((res: any) => {
+  //     this._currentUserSubject$.next(res);
+  //   });
+  // }
   getParkingState(ticketType: Number) {
 
     //this._VehicleListResponse$.next(null)
@@ -59,7 +64,7 @@ export class ParkingService {
     if(ticketType){
       url += "?ticketType="+ticketType
     }
-    this.http.get(url).subscribe((res: Vehicles) => {
+    this.http.get(url).subscribe((res: any) => {
       this._VehicleListResponse$.next(res)
 
     }, err => {

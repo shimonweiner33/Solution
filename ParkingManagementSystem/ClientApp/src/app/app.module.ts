@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatGridListModule, MatOptionModule, MatSelectModule } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -17,7 +18,6 @@ import { HomeComponent } from './home/home.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { AuthenticationService } from './services/authentication.service';
 import { ParkingService } from './services/parking.service';
-
 
 
 
@@ -43,6 +43,7 @@ import { ParkingService } from './services/parking.service';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatGridListModule,
+    MatInputModule,
     RouterModule.forRoot([
       { path: '', redirectTo: 'app', pathMatch: 'full' },
       { path: 'home', component: HomeComponent, pathMatch: 'full' },

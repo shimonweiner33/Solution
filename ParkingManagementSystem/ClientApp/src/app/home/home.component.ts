@@ -13,8 +13,7 @@ export class HomeComponent implements OnInit {
   title = "app";
   vehicleLists: CheckInDetails[] = [];
   vehicleListsForTest: CheckInDetails[] = [];
-
-
+  currentUser = "";
   // types: ticketType[] = [{ name: 'VIP' } ];//, img: '/img/motor'
 
   // lots = [{type: this.types[0], name: 'suzuki'}]
@@ -29,8 +28,10 @@ export class HomeComponent implements OnInit {
     }
   }
   ngOnInit(): void {
-
-    if (this.authenticationService.isLogin && !this.authenticationService.currentUserValue) {
+    if (
+      this.authenticationService.isLogin &&
+      !this.authenticationService.currentUserValue
+    ) {
       this.authenticationService.updateCurrentUser();
     }
 
@@ -39,80 +40,81 @@ export class HomeComponent implements OnInit {
     this.parkingService.VehicleList$.subscribe((vehicles: any) => {
       this.vehicleLists = vehicles ? vehicles.Vehicles : [];
     });
+    this.authenticationService.currentUser$.subscribe((currentUser: any) => {
+      if(!currentUser){
+        if (!this.authenticationService.isLogin) {
+          this.router.navigate(["/login"]);
+        }
+      }
+      else{
+        this.currentUser = currentUser
+      }
+    });
+    //this.fillVehicleList();
   }
 
   fillVehicleList() {
-    for (let index = 0; index < 5; index++) {
-      if (index % 5 === 1) {
-        const vehicle: CheckInDetails = {
-          licencePlateId: "11111111",
-          name: "David",
-          phone: "0545566666",
-          ticketType: 2,
-          vehicleType: 1,
-          vehicleHeight: 123,
-          vehicleWidth: 234,
-          vehicleLength: 2345,
-        };
-        this.vehicleListsForTest.push(vehicle);
-      }
+    this.vehicleListsForTest = []
 
-      if (index % 5 === 2) {
-        const vehicle: CheckInDetails = {
-          licencePlateId: "2222222",
-          name: "Erez",
-          phone: "0545444444",
-          ticketType: 1,
-          vehicleType: 1,
-          vehicleHeight: 123,
-          vehicleWidth: 234,
-          vehicleLength: 2345,
-        };
-        this.vehicleListsForTest.push(vehicle);
-      }
+    const vehicle1: CheckInDetails = {
+      licencePlateId: "11111111",
+      name: "David",
+      phone: "0545566666",
+      ticketType: 3,
+      vehicleType: 1,
+      vehicleHeight: 123,
+      vehicleWidth: 234,
+      vehicleLength: 2345,
+    };
+    this.vehicleListsForTest.push(vehicle1);
 
-      if (index % 5 === 3) {
-        const vehicle: CheckInDetails = {
-          licencePlateId: "3333333",
-          name: "Yoram",
-          phone: "0545555666",
-          ticketType: 3,
-          vehicleType: 1,
-          vehicleHeight: 123,
-          vehicleWidth: 234,
-          vehicleLength: 2345,
-        };
-        this.vehicleListsForTest.push(vehicle);
-      }
+    const vehicle2: CheckInDetails = {
+      licencePlateId: "2222222",
+      name: "Erez",
+      phone: "0545444444",
+      ticketType: 3,
+      vehicleType: 1,
+      vehicleHeight: 123,
+      vehicleWidth: 234,
+      vehicleLength: 2345,
+    };
+    this.vehicleListsForTest.push(vehicle2);
 
-      if (index % 5 === 4) {
-        const vehicle: CheckInDetails = {
-          licencePlateId: "4444444",
-          name: "Yehuda",
-          phone: "0545454545",
-          ticketType: 3,
-          vehicleType: 1,
-          vehicleHeight: 123,
-          vehicleWidth: 234,
-          vehicleLength: 2345,
-        };
-        this.vehicleListsForTest.push(vehicle);
-      }
+    const vehicle3: CheckInDetails = {
+      licencePlateId: "3333333",
+      name: "Yoram",
+      phone: "0545555666",
+      ticketType: 3,
+      vehicleType: 1,
+      vehicleHeight: 123,
+      vehicleWidth: 234,
+      vehicleLength: 2345,
+    };
+    this.vehicleListsForTest.push(vehicle3);
 
-      if (index % 5 === 0) {
-        const vehicle: CheckInDetails = {
-          licencePlateId: "5555555",
-          name: "Oded",
-          phone: "0524333333",
-          ticketType: 3,
-          vehicleType: 1,
-          vehicleHeight: 123,
-          vehicleWidth: 234,
-          vehicleLength: 2345,
-        };
-        this.vehicleListsForTest.push(vehicle);
-      }
-    }
+    const vehicle4: CheckInDetails = {
+      licencePlateId: "444444",
+      name: "Daniel",
+      phone: "0545555666",
+      ticketType: 3,
+      vehicleType: 1,
+      vehicleHeight: 123,
+      vehicleWidth: 234,
+      vehicleLength: 2345,
+    };
+    this.vehicleListsForTest.push(vehicle4);
+
+    const vehicle5: CheckInDetails = {
+      licencePlateId: "555555",
+      name: "Eli",
+      phone: "0545555666",
+      ticketType: 3,
+      vehicleType: 1,
+      vehicleHeight: 123,
+      vehicleWidth: 234,
+      vehicleLength: 2345,
+    };
+    this.vehicleListsForTest.push(vehicle5);
   }
   async createFive() {
     this.fillVehicleList();
@@ -123,6 +125,9 @@ export class HomeComponent implements OnInit {
       this.parkingService.checkIn(this.vehicleListsForTest[2]),
       this.parkingService.checkIn(this.vehicleListsForTest[3]),
       this.parkingService.checkIn(this.vehicleListsForTest[4]),
+
+      // this.parkingService.checkIn(this.vehicleListsForTest[3]),
+      //  this.parkingService.checkIn(this.vehicleListsForTest[4]), 
     ]);
     this.getParkingState();
   }

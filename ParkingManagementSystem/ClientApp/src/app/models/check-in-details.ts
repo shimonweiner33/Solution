@@ -3,8 +3,9 @@ export class CheckInDetails {
     name: string;
     phone: string;
     ticketType: number;
-    vehicleType: number;
-    vehicleHeight: number;
-    vehicleWidth: number;
-    vehicleLength: number;
+    vehicleType?: number;
+    vehicleHeight?: number;
+    vehicleWidth?: number;
+    vehicleLength?: number;
+    lotNumber: number;
 }

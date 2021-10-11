@@ -25,7 +25,7 @@
             [routerLinkActive]="['link-active']"
             [routerLinkActiveOptions]="{ exact: true }"
           >
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+            <a class="nav-link text-dark" [routerLink]="['/home']">Home</a>
           </li>
           <li class="nav-item" *ngIf="!authenticationService.isLogin" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/login']"
@@ -36,12 +36,12 @@
               >Logout</a
             >
 
-          <li class="nav-item" [routerLinkActive]="['link-active']">
+          <li class="nav-item" *ngIf="authenticationService.isLogin" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/parking-check-in']"
               >CheckIn</a
             >
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
+          <li class="nav-item" *ngIf="authenticationService.isLogin" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/parking-check-out']"
               >CheckOut</a
             >

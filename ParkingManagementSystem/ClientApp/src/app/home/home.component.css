@@ -21,16 +21,8 @@ body{
     display:flex;
     min-height: 100vh;
   }
-  /* .online-list{
-    width: 10%;
-  } */
-  /* .forum-body{
-    background-color: #141414;
-    padding: 40px;
-    border-radius: 0 0 45px 45px;  margin-bottom: 40px;
+  mat-grid-tile {
+    background: lightblue;
   }
-
-  .forum-body-components{
-    width: 100%;
-  } */
+  
   

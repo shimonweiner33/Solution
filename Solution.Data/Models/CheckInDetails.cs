@@ -22,11 +22,11 @@ namespace Solution.Data.Models
         public string LicencePlateId { get; set; }
         public string Name { get; set; }
         public string Phone { get; set; }
-        public TicketTypes TicketType { get; set; }
-        public VehicleTypes VehicleType { get; set; }
-        public int VehicleHeight { get; set; }
-        public int VehicleWidth { get; set; }
-        public int VehicleLength { get; set; }
+        public TicketTypes? TicketType { get; set; }
+        public VehicleTypes? VehicleType { get; set; }
+        public int? VehicleHeight { get; set; }
+        public int? VehicleWidth { get; set; }
+        public int? VehicleLength { get; set; }
         public int? LotNumber { get; set; }
     }
 }

@@ -69,10 +69,10 @@ namespace Solution.Services.Tests
             // Act
             try
             {
-                TicketBase ticketBase = await _ticketFactory.GetTicket(testDataInfo.Data.TicketType);
+                TicketBase ticketBase = await _ticketFactory.GetTicket(testDataInfo.Data.TicketType.Value);
                 Assert.NotNull(ticketBase);
 
-                if (!ticketBase.IsVehiclesDimensionsSuitableTicketType(testDataInfo.Data.VehicleHeight, testDataInfo.Data.VehicleWidth, testDataInfo.Data.VehicleLength))
+                if (!ticketBase.IsVehiclesDimensionsSuitableTicketType(testDataInfo.Data.VehicleHeight.Value, testDataInfo.Data.VehicleWidth.Value, testDataInfo.Data.VehicleLength.Value))
                 {
                     actualResult = false;
                 }
@@ -108,12 +108,12 @@ namespace Solution.Services.Tests
             // Act
             try
             {
-                TicketBase ticketBase = await _ticketFactory.GetTicket(testDataInfo.Data.TicketType);
+                TicketBase ticketBase = await _ticketFactory.GetTicket(testDataInfo.Data.TicketType.Value);
                 Assert.NotNull(ticketBase);
 
-                if (!ticketBase.IsVehiclesDimensionsSuitableTicketType(testDataInfo.Data.VehicleHeight, testDataInfo.Data.VehicleWidth, testDataInfo.Data.VehicleLength))
+                if (!ticketBase.IsVehiclesDimensionsSuitableTicketType(testDataInfo.Data.VehicleHeight.Value, testDataInfo.Data.VehicleWidth.Value, testDataInfo.Data.VehicleLength.Value))
                 {
-                    ticketBase = await _ticketFactory.GetCorrectTicket(testDataInfo.Data.VehicleHeight, testDataInfo.Data.VehicleWidth, testDataInfo.Data.VehicleLength);
+                    ticketBase = await _ticketFactory.GetCorrectTicket(testDataInfo.Data.VehicleHeight.Value, testDataInfo.Data.VehicleWidth.Value, testDataInfo.Data.VehicleLength.Value);
                     Assert.NotNull(ticketBase);
                     actualResult = true;
                 }
