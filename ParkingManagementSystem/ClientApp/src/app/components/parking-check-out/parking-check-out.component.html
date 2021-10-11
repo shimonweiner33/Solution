@@ -1,8 +1,15 @@
 <div>
-  <div>
-    <label for="first-name">לוחית רישוי: </label>
+  <!-- <div>
+    <label for="first-name">LicencePlateId: </label>
     <input id="first-name" type="text" [formControl]="parkingControl">
-  </div>
+  </div> -->
 
-  <div (click)="save()">שמור</div>
+  <div>
+    <label>LicencePlateId:</label>
+    <mat-form-field appearance="fill">
+      <input [formControl]="parkingControl" type="text" matInput>
+
+    </mat-form-field>
+  </div>
+  <button mat-button (click)="save()">Save</button>
 </div>

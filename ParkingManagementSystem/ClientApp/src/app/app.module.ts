@@ -12,8 +12,8 @@ import { LoginComponent } from './components/login/login/login.component';
 import { ParkingCheckInComponent } from './components/parking-check-in/parking-check-in.component';
 import { ParkingCheckOutComponent } from './components/parking-check-out/parking-check-out.component';
 import { RegisterComponent } from './components/register/register.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
+// import { CounterComponent } from './counter/counter.component';
+// import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { HomeComponent } from './home/home.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { AuthenticationService } from './services/authentication.service';
@@ -27,8 +27,8 @@ import { ParkingService } from './services/parking.service';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
+    // CounterComponent,
+    // FetchDataComponent,
     ParkingCheckInComponent,
     ParkingCheckOutComponent,
     LoginComponent,

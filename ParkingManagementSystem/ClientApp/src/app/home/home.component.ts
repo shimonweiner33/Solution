@@ -50,7 +50,6 @@ export class HomeComponent implements OnInit {
         this.currentUser = currentUser
       }
     });
-    //this.fillVehicleList();
   }
 
   fillVehicleList() {
@@ -65,6 +64,7 @@ export class HomeComponent implements OnInit {
       vehicleHeight: 123,
       vehicleWidth: 234,
       vehicleLength: 2345,
+      lotNumber: null
     };
     this.vehicleListsForTest.push(vehicle1);
 
@@ -77,6 +77,7 @@ export class HomeComponent implements OnInit {
       vehicleHeight: 123,
       vehicleWidth: 234,
       vehicleLength: 2345,
+      lotNumber: null
     };
     this.vehicleListsForTest.push(vehicle2);
 
@@ -89,6 +90,7 @@ export class HomeComponent implements OnInit {
       vehicleHeight: 123,
       vehicleWidth: 234,
       vehicleLength: 2345,
+      lotNumber: null
     };
     this.vehicleListsForTest.push(vehicle3);
 
@@ -101,6 +103,7 @@ export class HomeComponent implements OnInit {
       vehicleHeight: 123,
       vehicleWidth: 234,
       vehicleLength: 2345,
+      lotNumber: null
     };
     this.vehicleListsForTest.push(vehicle4);
 
@@ -113,6 +116,7 @@ export class HomeComponent implements OnInit {
       vehicleHeight: 123,
       vehicleWidth: 234,
       vehicleLength: 2345,
+      lotNumber: null
     };
     this.vehicleListsForTest.push(vehicle5);
   }
@@ -124,11 +128,9 @@ export class HomeComponent implements OnInit {
       this.parkingService.checkIn(this.vehicleListsForTest[1]),
       this.parkingService.checkIn(this.vehicleListsForTest[2]),
       this.parkingService.checkIn(this.vehicleListsForTest[3]),
-      this.parkingService.checkIn(this.vehicleListsForTest[4]),
-
-      // this.parkingService.checkIn(this.vehicleListsForTest[3]),
-      //  this.parkingService.checkIn(this.vehicleListsForTest[4]), 
+      this.parkingService.checkIn(this.vehicleListsForTest[4]), 
     ]);
+
     this.getParkingState();
   }
 
