@@ -55,91 +55,6 @@ namespace Solution.Data.Repository
                 throw ex;
             }
         }
-        //public async Task<bool> CheckIn(CheckInDetails input)
-        //{
-        //    var sQuery = string.Format(@"
-        //                        DECLARE @capacity INT
-        //                        SET @capacity = (select {0} from Params)
-        //                        DECLARE @minLot INT
-        //                        SET @minLot = (select {1} from Params)
-        //                        DECLARE @maxLot INT
-        //                        SET @maxLot = (select {2} from Params)
-
-        //                        DROP TABLE IF EXISTS #Temp
-
-        //                        CREATE TABLE #Temp
-        //                        (
-        //                            LotNumber int
-        //                        )
-        //                        INSERT INTO #Temp
-        //                        SELECT LotNumber FROM Vehicles WHERE TicketType = @ticketType
-        //                        ---------------
-        //                        DECLARE @lot INT;
-        //                        SET @lot = @minLot;
-
-        //                        DECLARE @lotFound BIT;
-        //                        SET @lotFound = 0;
-
-        //                        WHILE @lot <= @maxLot AND @lotFound = 0
-        //                        BEGIN
-        //                           IF(@lot NOT IN (select LotNumber from #Temp))
-        //                        		BEGIN
-        //                        				PRINT @lot
-        //                        				SET @lotFound = 1
-        //                        		END
-        //                           ELSE
-        //                        		BEGIN
-        //                        				SET @lot = @lot + 1;
-        //                        		END
-        //                        END;
-
-
-        //                        DECLARE @occupy INT
-        //                        SET @occupy = (select count(LicencePlateId) from Vehicles where TicketType = @ticketType)
-
-        //                        IF(@capacity > @occupy AND 
-        //                            NOT EXISTS (SELECT * FROM Vehicles WHERE LicencePlateId = @licencePlateId)
-        //                        )
-        //                        BEGIN
-        //                              INSERT INTO Vehicles(LicencePlateId, Name, Phone, TicketType, VehicleType, VehicleHeight, VehicleWidth, VehicleLength, LotNumber)
-        //                              VALUES(@licencePlateId, @name, @phone, @ticketType, @vehicleType, @vehicleHeight, @vehicleLength, @vehicleWidth, @lot);
-        //                        END 
-        //                        ", input.TicketType + "Capacity", input.TicketType + "MinLot", input.TicketType + "MaxLot");
-
-        //    using (IDbConnection conn = Connection)
-        //    {
-        //        conn.Open();
-        //        using (var transaction = conn.BeginTransaction())
-        //        {
-        //            try
-        //            {
-        //                var affectedRowId = await conn.ExecuteScalarAsync(sQuery,
-        //                        new
-        //                        {
-        //                            licencePlateId = input.LicencePlateId,
-        //                            name = input.Name,
-        //                            phone = input.Phone,
-        //                            ticketType = ((int)(input.TicketType)),
-        //                            vehicleType = input.VehicleType,
-        //                            vehicleHeight = input.VehicleHeight,
-        //                            vehicleLength = input.VehicleLength,
-        //                            vehicleWidth = input.VehicleWidth
-        //                        }, transaction);
-        //                transaction.Commit();
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                _logger.Error(ex, $"CheckIn('{input}')  failed");
-
-        //                transaction.Rollback();
-        //                throw;
-        //            }
-        //        }
-        //        _logger.Debug($"CheckIn ('{input}')  result={true}");
-
-        //        return true;
-        //    }
-        //}
 
 
         public async Task<bool> CheckOut(string licencePlateId)
@@ -217,6 +132,5 @@ namespace Solution.Data.Repository
                 throw ex;
             }
         }
-
     }
 }

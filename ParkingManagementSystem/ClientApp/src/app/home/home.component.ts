@@ -14,9 +14,7 @@ export class HomeComponent implements OnInit {
   vehicleLists: CheckInDetails[] = [];
   vehicleListsForTest: CheckInDetails[] = [];
   currentUser = "";
-  // types: ticketType[] = [{ name: 'VIP' } ];//, img: '/img/motor'
-
-  // lots = [{type: this.types[0], name: 'suzuki'}]
+  loading = false;
 
   constructor(
     private router: Router,
@@ -59,7 +57,7 @@ export class HomeComponent implements OnInit {
       licencePlateId: "11111111",
       name: "David",
       phone: "0545566666",
-      ticketType: 3,
+      ticketType: 0,// index in arr
       vehicleType: 1,
       vehicleHeight: 123,
       vehicleWidth: 234,
@@ -72,7 +70,7 @@ export class HomeComponent implements OnInit {
       licencePlateId: "2222222",
       name: "Erez",
       phone: "0545444444",
-      ticketType: 3,
+      ticketType: 1,// index in arr
       vehicleType: 1,
       vehicleHeight: 123,
       vehicleWidth: 234,
@@ -85,7 +83,7 @@ export class HomeComponent implements OnInit {
       licencePlateId: "3333333",
       name: "Yoram",
       phone: "0545555666",
-      ticketType: 3,
+      ticketType: 2,// index in arr
       vehicleType: 1,
       vehicleHeight: 123,
       vehicleWidth: 234,
@@ -98,8 +96,8 @@ export class HomeComponent implements OnInit {
       licencePlateId: "444444",
       name: "Daniel",
       phone: "0545555666",
-      ticketType: 3,
-      vehicleType: 1,
+      ticketType: 0,// index in arr
+      vehicleType: 2,
       vehicleHeight: 123,
       vehicleWidth: 234,
       vehicleLength: 2345,
@@ -111,9 +109,9 @@ export class HomeComponent implements OnInit {
       licencePlateId: "555555",
       name: "Eli",
       phone: "0545555666",
-      ticketType: 3,
-      vehicleType: 1,
-      vehicleHeight: 123,
+      ticketType: 1,// index in arr
+      vehicleType: 2,
+      vehicleHeight: 1123,
       vehicleWidth: 234,
       vehicleLength: 2345,
       lotNumber: null
@@ -121,15 +119,17 @@ export class HomeComponent implements OnInit {
     this.vehicleListsForTest.push(vehicle5);
   }
   async createFive() {
+    this.loading = true;
     this.fillVehicleList();
-
     await Promise.all([
-      this.parkingService.checkIn(this.vehicleListsForTest[0]),
-      this.parkingService.checkIn(this.vehicleListsForTest[1]),
-      this.parkingService.checkIn(this.vehicleListsForTest[2]),
-      this.parkingService.checkIn(this.vehicleListsForTest[3]),
-      this.parkingService.checkIn(this.vehicleListsForTest[4]), 
+      this.parkingService.checkIn(this.vehicleListsForTest[0]).toPromise(),
+      this.parkingService.checkIn(this.vehicleListsForTest[1]).toPromise(),
+      this.parkingService.checkIn(this.vehicleListsForTest[2]).toPromise(),
+      this.parkingService.checkIn(this.vehicleListsForTest[3]).toPromise(),
+      this.parkingService.checkIn(this.vehicleListsForTest[4]).toPromise(), 
     ]);
+
+    this.loading = false;
 
     this.getParkingState();
   }

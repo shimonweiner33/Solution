@@ -13,6 +13,8 @@ export class ParkingCheckInComponent implements OnInit {
   parkingForm: FormGroup;
   vehicleTypes = ['Motorcycle', 'Private', 'Crossover', 'SUV', 'Van', 'Truck'];
   ticketTypes = ['VIP', 'Value', 'Regular'];
+  error = null;
+  saving = false;
 
 constructor(private fb: FormBuilder, private parkingService: ParkingService,
    private authenticationService: AuthenticationService, private router: Router) {
@@ -32,10 +34,19 @@ constructor(private fb: FormBuilder, private parkingService: ParkingService,
     if (this.parkingForm.invalid) {
       return;
     }
+    this.saving = true;
 
-    // const ticketType = this.parkingForm.get('ticketType');
-    // ticketType.setValue((ticketType.value) + 1);
-    this.parkingService.checkIn(this.parkingForm.value);
+    this.parkingService.checkIn(this.parkingForm.value).toPromise()
+    .then((data: any) => {
+      debugger;
+      if (data && data.body && data.body.errorMessage) {
+        this.error = data.body.errorMessage;
+      } else {
+        this.initListFormGroup();      
+        this.error = '';
+      }
+      this.saving = false;
+    })
   }
 
   initListFormGroup() {
@@ -44,7 +55,7 @@ constructor(private fb: FormBuilder, private parkingService: ParkingService,
       name: ['', Validators.required],
       phone: ['', Validators.required],
       ticketType: [0, Validators.required],
-      vehicleType: [1, Validators.required],
+      vehicleType: [0, Validators.required],
       vehicleHeight: [0, Validators.required],
       vehicleWidth: [0, Validators.required],
       vehicleLength: [0, Validators.required],

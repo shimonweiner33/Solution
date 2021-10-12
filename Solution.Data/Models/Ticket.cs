@@ -23,6 +23,11 @@ namespace Solution.Data.Models
     }
     public class TicketVIP : TicketBase
     {
+        public override string ToString()
+        {
+            string result = "VIP";
+            return result;
+        }
         public TicketVIP()
         {
             Height = int.MaxValue;
@@ -37,6 +42,11 @@ namespace Solution.Data.Models
 
     public class TicketValue : TicketBase
     {
+        public override string ToString()
+        {
+            string result = "Value";
+            return result;
+        }
         public TicketValue()
         {
             Height = 2500;
@@ -51,6 +61,11 @@ namespace Solution.Data.Models
 
     public class TicketRegular : TicketBase
     {
+        public override string ToString()
+        {
+            string result = "Regular";
+            return result;
+        }
         public TicketRegular()
         {
             Height = 2000;
