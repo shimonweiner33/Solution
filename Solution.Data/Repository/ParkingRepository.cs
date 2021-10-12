@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using Solution.Common.Enums;
 using Solution.Data.Models;
 using Solution.Data.Repository.Interface;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Solution.Data.Repository
 {
-    class ParkingRepository : BaseRepository, IParkingRepository
+    public class ParkingRepository : BaseRepository, IParkingRepository
     {
         private readonly ILogger _logger;
 
@@ -19,45 +20,31 @@ namespace Solution.Data.Repository
         {
             _logger = Log.ForContext<ParkingRepository>();
         }
+
+        //public async Task<string> GetVehiclesByTicketType(int? ticketType)
+
         public async Task<bool> CheckIn(CheckInDetails input)
         {
             try
             {
-                var sQuery = string.Format(@"                           
-                                DECLARE @capacity INT
-                                SET @capacity = (select {0} from ParkingLots)
-                                DECLARE @occupy INT
-                                SET @occupy = (select count(LicencePlateId) from Vehicles where TicketType = @ticketType)
-
-                                IF(@capacity > @occupy AND 
-                                    NOT EXISTS (SELECT * FROM Vehicles WHERE LicencePlateId = @licencePlateId)
-                                )
-                                BEGIN
-                                      INSERT INTO Vehicles(LicencePlateId, Name, Phone, TicketType, VehicleType, VehicleHeight, VehicleWidth, VehicleLength)
-                                      VALUES(@licencePlateId, @name, @phone, @ticketType, @vehicleType, @vehicleHeight, @vehicleLength, @vehicleWidth);
-                                END 
-                                ", input.TicketType + "Capacity");
+                DynamicParameters _params = new DynamicParameters();
 
                 using (IDbConnection conn = Connection)
                 {
-                    conn.Open();
-                    using (var transaction = conn.BeginTransaction())
-                    {
-                        var affectedRowId = await conn.ExecuteScalarAsync(sQuery,
-                                    new
-                                    {
-                                        licencePlateId = input.LicencePlateId,
-                                        name = input.Name,
-                                        phone = input.Phone,
-                                        ticketType = ((int)(input.TicketType)),
-                                        vehicleType = input.VehicleType,
-                                        vehicleHeight = input.VehicleHeight,
-                                        vehicleLength = input.VehicleLength,
-                                        vehicleWidth = input.VehicleWidth
-                                    }, transaction);
-                        transaction.Commit();
-                    }
-                    _logger.Debug($"CheckIn ('{input}')  result={true}");
+                    _params.Add("licencePlateId", input.LicencePlateId, direction: ParameterDirection.Input);
+                    _params.Add("name", input.Name, direction: ParameterDirection.Input);
+                    _params.Add("phone", input.Phone, direction: ParameterDirection.Input);
+                    _params.Add("ticketType", (int)input.TicketType, direction: ParameterDirection.Input);
+                    _params.Add("ticketTypeName", ((TicketTypes)input.TicketType).ToString(), direction: ParameterDirection.Input);
+                    _params.Add("vehicleType", (int)input.VehicleType, direction: ParameterDirection.Input);
+                    _params.Add("vehicleTypeName", ((VehicleTypes)input.VehicleType).ToString(), direction: ParameterDirection.Input);
+                    _params.Add("vehicleHeight", input.VehicleHeight, direction: ParameterDirection.Input);
+                    _params.Add("vehicleWidth", input.VehicleWidth, direction: ParameterDirection.Input);
+                    _params.Add("vehicleLength", input.VehicleLength, direction: ParameterDirection.Input);
+
+                    var result = await conn.ExecuteAsync("CheckIn", _params, commandType: CommandType.StoredProcedure);
+                    
+                    _logger.Debug($"CheckIn ('{input}')  result={result}");
 
                     return true;
                 }
@@ -74,7 +61,29 @@ namespace Solution.Data.Repository
         {
             try
             {
-                var sQuery = @"DELETE FROM Vehicles WHERE LicencePlateId = @licencePlateId";
+                var sQuery = @"
+                                BEGIN TRY
+                                	BEGIN TRAN T1;
+                                
+                                		DECLARE @deletedTBL TABLE  
+                                		(  
+                                		    LotNumber INT 
+                                		);
+                                		DELETE FROM Vehicles 
+                                		OUTPUT DELETED.LotNumber INTO @deletedTBL  
+                                		WHERE LicencePlateId = @licencePlateId
+                                		
+                                		UPDATE ParkingLots
+                                		SET Status = 0
+                                		WHERE LotNumber = (select LotNumber from @deletedTBL)
+                                
+                                	COMMIT TRAN T1; 
+                                END TRY
+                                
+                                BEGIN CATCH
+                                	ROLLBACK
+                                END CATCH
+                                ";
 
                 using (IDbConnection conn = Connection)
                 {
@@ -93,10 +102,10 @@ namespace Solution.Data.Repository
             }
         }
         /// <summary>
-        /// This function Gets the Vehicles list By TicketType.
+        /// This function Gets the Vehicles list from the ParkingLots By TicketType.
         /// </summary>
         /// <param name="ticketType">use to filter vehicles in Vehicles-Table.</param>
-        /// <returns>vehicles list filter by ticketType. if ticketType is null => return all the Vehicles</returns>
+        /// <returns>the vehicles list that parking in the ParkingLots filter by ticketType. if ticketType is null => return all the Vehicles</returns>
         public async Task<string> GetVehiclesByTicketType(int? ticketType)
         {
             try
@@ -109,7 +118,7 @@ namespace Solution.Data.Repository
                     {
                         _params.Add("ticketType", ticketType.Value, direction: ParameterDirection.Input);
                     }
-                    _params.Add("jsonResult", "", direction: ParameterDirection.Output);
+                    _params.Add("jsonResult", "", direction: ParameterDirection.Output, size: int.MaxValue);
                     var result = await conn.ExecuteAsync("GetVehiclesByTicketType", _params, commandType: CommandType.StoredProcedure);
                     var retVal = _params.Get<string>("jsonResult");
                     _logger.Debug($"GetVehiclesByTicketType ('{ticketType}')  result={retVal}");
@@ -123,6 +132,5 @@ namespace Solution.Data.Repository
                 throw ex;
             }
         }
-
     }
 }

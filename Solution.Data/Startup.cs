@@ -13,6 +13,8 @@ namespace Solution.Data
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddSingleton<IParkingRepository, ParkingRepository>();
+            services.AddSingleton<IMemberRepository, MemberRepository>();
+            services.AddSingleton<IAcountRepository, AcountRepository>();
 
             return services;
         }

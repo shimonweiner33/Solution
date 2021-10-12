@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ParkingService } from 'src/app/services/parking.service';
 
 @Component({
@@ -10,9 +12,13 @@ import { ParkingService } from 'src/app/services/parking.service';
 export class ParkingCheckOutComponent implements OnInit {
   parkingControl: FormControl;
 
-constructor(private parkingService: ParkingService) { }
+constructor(private parkingService: ParkingService, private authenticationService: AuthenticationService, 
+  private router: Router) {
+  if (!this.authenticationService.isLogin) {
+    this.router.navigate(["/login"]);
+  }
+ }
   ngOnInit() {
-    console.log(this.parkingService.showAll());
     this.parkingControl = new FormControl('', Validators.required);
   }
 

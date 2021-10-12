@@ -1,10 +1,14 @@
 <div>
-  <app-nav-menu></app-nav-menu>
-
+  <div>{{currentUser?"hello " + currentUser.member.userName : ""}}</div>
   
-  <app-parking-check-out></app-parking-check-out>
-
-  <div *ngFor="let type of types">
-    <img (src)="type.img" />
-  </div>
+  <button [disabled]="loading" (click)="createFive()" class="btn btn-primary">createFive</button>
+  
+  <mat-grid-list cols="10" rowHeight="2:1">
+    <mat-grid-tile *ngFor="let vehicle of vehicleLists">
+      <div *ngIf="!vehicle || !vehicle.LicencePlateId">X</div>
+      <div *ngIf="vehicle.LicencePlateId">{{"Lot "+vehicle.LotNumber+" : "+ vehicle.LicencePlateId}}</div>
+    </mat-grid-tile>
+  </mat-grid-list>
 </div>
+    
+   

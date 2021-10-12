@@ -1,53 +1,65 @@
 <div>
+
   <form [formGroup]="parkingForm">
     <div>
-      <label for="first-name">לוחית רישוי: </label>
-      <input id="first-name" type="text" formControlName="licencePlateId">
+      <label>Licence plate Id:</label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="licencePlateId">
+      </mat-form-field>
     </div>
 
     <div>
-      <label for="last-name">שם: </label>
-      <input id="last-name" type="text" formControlName="name">
+      <label>Name:</label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="name">
+      </mat-form-field>
     </div>
 
     <div>
-      <label for="last-name">טלפון: </label>
-      <input id="last-name" type="text" formControlName="phone">
-    </div>
-    
-    <div>
-        <label for="last-name">סוג כרטיס: </label>
-        <mat-select formControlName="ticketType" placeholder="סוג כרטיס">
-          <mat-option *ngFor="let type of ticketTypes; let index=index" [value]="index">
-            {{ type }}
-          </mat-option>
-        </mat-select>
+      <label>Phone:</label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="phone">
+      </mat-form-field>
     </div>
 
     <div>
-        <label for="last-name">סוג רכב: </label>
-        <mat-select formControlName="vehicleType" placeholder="סוג רכב">
-          <mat-option *ngFor="let type of vehicleTypes; let index=index" [value]="index">
-            {{ type }}
-          </mat-option>
-        </mat-select>
+      <label>Height:</label>
+      <mat-form-field appearance="fill" placeholder="vehicleHeight">
+        <input matInput type="number" formControlName="vehicleHeight">
+      </mat-form-field>
     </div>
 
     <div>
-      <label for="last-name">גובה: </label>
-      <input id="last-name" type="number" formControlName="vehicleHeight">
+      <label>Width:</label>
+      <mat-form-field appearance="fill">
+        <input type="number" matInput formControlName="vehicleWidth">
+      </mat-form-field>
     </div>
 
     <div>
-      <label for="last-name">משקל: </label>
-      <input id="last-name" type="number" formControlName="vehicleWidth">
+      <label>Length:</label>
+      <mat-form-field appearance="fill">
+        <input type="number" matInput formControlName="vehicleLength">
+      </mat-form-field>
+    </div>
+    <div class="dropDown">
+      <label>Ticket type: </label>
+      <mat-select formControlName="ticketType" placeholder="ticketType">
+        <mat-option *ngFor="let type of ticketTypes; let index=index" [value]="index">
+          {{ type }}
+        </mat-option>
+      </mat-select>
     </div>
 
-    <div>
-      <label for="last-name">אורך: </label>
-      <input id="last-name" type="number" formControlName="vehicleLength">
+    <div class="dropDown">
+      <label>Vehicle type:</label>
+      <mat-select formControlName="vehicleType" placeholder="vehicleType">
+        <mat-option *ngFor="let type of vehicleTypes; let index=index" [value]="index">
+          {{ type }}
+        </mat-option>
+      </mat-select>
     </div>
-
-    <div (click)="save()">שמור</div>
+    <button mat-button (click)="save()" [disabled]="saving">Save</button>
   </form>
+  <div *ngIf="error">{{error}}</div>
 </div>

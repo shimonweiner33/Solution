@@ -17,12 +17,17 @@ namespace Solution.Data.Models
 
         public virtual bool IsVehiclesDimensionsSuitableTicketType(int vehicleHeight, int vehicleWidth, int vehicleLength)
         {
-            if (this.Height > vehicleHeight && this.Width > vehicleWidth && this.Length > vehicleLength) return true;
+            if (this.Height >= vehicleHeight && this.Width >= vehicleWidth && this.Length >= vehicleLength) return true;
             return false;
         }
     }
     public class TicketVIP : TicketBase
     {
+        public override string ToString()
+        {
+            string result = "VIP";
+            return result;
+        }
         public TicketVIP()
         {
             Height = int.MaxValue;
@@ -37,6 +42,11 @@ namespace Solution.Data.Models
 
     public class TicketValue : TicketBase
     {
+        public override string ToString()
+        {
+            string result = "Value";
+            return result;
+        }
         public TicketValue()
         {
             Height = 2500;
@@ -51,6 +61,11 @@ namespace Solution.Data.Models
 
     public class TicketRegular : TicketBase
     {
+        public override string ToString()
+        {
+            string result = "Regular";
+            return result;
+        }
         public TicketRegular()
         {
             Height = 2000;

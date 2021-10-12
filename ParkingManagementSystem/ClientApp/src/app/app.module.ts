@@ -1,8 +1,9 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatOptionModule, MatSelectModule } from '@angular/material';
+import { MatButtonModule, MatGridListModule, MatOptionModule, MatSelectModule } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -11,10 +12,9 @@ import { LoginComponent } from './components/login/login/login.component';
 import { ParkingCheckInComponent } from './components/parking-check-in/parking-check-in.component';
 import { ParkingCheckOutComponent } from './components/parking-check-out/parking-check-out.component';
 import { RegisterComponent } from './components/register/register.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { HomeComponent } from './home/home.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { AuthenticationService } from './services/authentication.service';
 import { ParkingService } from './services/parking.service';
 
 
@@ -25,8 +25,6 @@ import { ParkingService } from './services/parking.service';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     ParkingCheckInComponent,
     ParkingCheckOutComponent,
     LoginComponent,
@@ -38,18 +36,22 @@ import { ParkingService } from './services/parking.service';
     FormsModule,
     MatOptionModule,
     MatSelectModule,
+    MatButtonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
+    MatGridListModule,
+    MatInputModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'checkin', component: ParkingCheckInComponent, pathMatch: 'full' },
-      { path: 'checkout', component: ParkingCheckOutComponent, pathMatch: 'full' },
-      // { path: 'counter', component: CounterComponent },
-      // { path: 'fetch-data', component: FetchDataComponent },
+      { path: '', redirectTo: 'app', pathMatch: 'full' },
+      { path: 'home', component: HomeComponent, pathMatch: 'full' },
+      { path: 'parking-check-in', component: ParkingCheckInComponent, pathMatch: 'full' },
+      { path: 'parking-check-out', component: ParkingCheckOutComponent, pathMatch: 'full' },
+      { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent },
     ]),
     NoopAnimationsModule
   ],
-  providers: [ParkingService],
+  providers: [ParkingService, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

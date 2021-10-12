@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Solution.Common.Enums;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace ParkingManagementSystem.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ParkingController : ControllerBase
@@ -27,27 +29,29 @@ namespace ParkingManagementSystem.Controllers
             _ticketFactory = ticketFactory;
         }
 
-        //[HttpGet]
-        //public CheckInDetails Get(TicketTypes ticketType)
-        //{
-        //    //TicketCreator creator;
-        //    //creator = new TicketVipCreator();
-        //    //TicketBase ticketBase = creator.IsVehiclesDimensionsSuitableTicketType(34);
-        //    TicketBase ticketBase = _ticketFactory.GetTicket(ticketType);
-        //    if (!ticketBase.IsVehiclesDimensionsSuitableTicketType(1, 2, 3))
-        //    {
-        //        ticketBase = _ticketFactory.GetCorrectTicket(1, 2, 3);
-        //    }
-        //    return new CheckInDetails()
-        //    {
-        //        Name = "ssssss"
-        //    };
-        //}
-        //[HttpGet, Route("CheckIn2")]
-        //public async Task<bool> CheckIn2()
-        //{
-        //    return true;
-        //}
+        /// <summary>
+        /// This function Gets the Vehicles list By TicketType.
+        /// </summary>
+        /// <param name="ticketType">ticketType use to filter vehicles int Vehicles-Table. if null => return all</param>
+        /// <returns>Result - the model asked as string</returns>
+        [HttpGet, Route("GetVehiclesByTicketType")]
+        public async Task<string> GetVehiclesByTicketType(int? ticketType)
+        {
+            string result = string.Empty;
+
+            try
+            {
+                result = await _parkingService.GetVehiclesByTicketTypeJson(ticketType);
+                _logger.Information($"GetVehiclesByTicketType ('{ticketType}') Vehicles list => {result}");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"GetVehiclesByTicketType ('{ticketType}') failed  => exception:{ex.Message}");
+                return result;
+            }
+            return result;
+        }
+
         /// <summary>
         /// This function target to check-in the vehicle.
         /// Checks whether the vehicles dimensions are suitable with the TicketType. 
@@ -56,28 +60,43 @@ namespace ParkingManagementSystem.Controllers
         /// <param name="input">CheckIn - details need for checks validation and assigned the parking lot</param>
         /// <returns>Result - the model asked as ...</returns>
         [HttpPost, Route("CheckIn")]
-        public async Task<bool> CheckIn(CheckInDetails input)
+        public async Task<CheckInResult> CheckIn(CheckInDetails input)
         {
             bool result = false;
-
+            CheckInResult checkInResult = new CheckInResult();
             try
             {
-                TicketBase ticketBase = _ticketFactory.GetTicket(input.TicketType);
-                if (!ticketBase.IsVehiclesDimensionsSuitableTicketType(input.VehicleHeight, input.VehicleWidth, input.VehicleLength))
+                if (!input.VehicleType.HasValue || !input.TicketType.HasValue || !input.VehicleHeight.HasValue || !input.VehicleWidth.HasValue
+                    || !input.VehicleLength.HasValue || String.IsNullOrEmpty(input.LicencePlateId))
                 {
-                    ticketBase = _ticketFactory.GetCorrectTicket(input.VehicleHeight, input.VehicleWidth, input.VehicleLength);
+                    checkInResult.ErrorMessage = "invalid Check In Details ";
+                }
+                else if((int)input.TicketType.Value > 3)//to do change validation
+                {
+                    checkInResult.ErrorMessage = "invalid Check In Details ";
                 }
                 else
                 {
-                    result = await _parkingService.CheckIn(input);
+                    TicketBase ticketBase = await _ticketFactory.GetTicket(input.TicketType.Value);
+                    if (!ticketBase.IsVehiclesDimensionsSuitableTicketType(input.VehicleHeight.Value, input.VehicleWidth.Value, input.VehicleLength.Value))
+                    {
+                        ticketBase = await _ticketFactory.GetCorrectTicket(input.VehicleHeight.Value, input.VehicleWidth.Value, input.VehicleLength.Value);
+                        checkInResult.CorrectTicket = ticketBase;
+                        checkInResult.ErrorMessage = "ticket dimensions are not suitable with the Vehicle dimensions. the correct ticket is - " + ticketBase;
+                    }
+                    else
+                    {
+                        result = await _parkingService.CheckIn(input);
+                        checkInResult.IsCheckIn = result;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, $"CheckIn ('{input}') failed  => exception:{ex.Message}");
-                return false;
+                return checkInResult;
             }
-            return result;
+            return checkInResult;
         }
 
         /// <summary>
@@ -100,30 +119,6 @@ namespace ParkingManagementSystem.Controllers
             {
                 _logger.Error(ex, $"CheckOut ('{licencePlateId}') failed  => exception:{ex.Message}");
                 return false;
-            }
-            return result;
-        }
-
-
-        /// <summary>
-        /// This function Gets the Vehicles list By TicketType.
-        /// </summary>
-        /// <param name="ticketType">ticketType use to filter vehicles int Vehicles-Table</param>
-        /// <returns>Result - the model asked as string</returns>
-        [HttpGet, Route("GetVehiclesByTicketType")]
-        public async Task<string> GetVehiclesByTicketType(int? ticketType)
-        {
-            string result = string.Empty;
-
-            try
-            {
-                result = await _parkingService.GetVehiclesByTicketTypeJson(ticketType);
-                _logger.Information($"GetVehiclesByTicketType ('{ticketType}') Vehicles list => {result}");
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, $"GetVehiclesByTicketType ('{ticketType}') failed  => exception:{ex.Message}");
-                return result;
             }
             return result;
         }

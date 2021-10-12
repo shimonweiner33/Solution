@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) {
     if (this.authenticationService.isLogin) {
-      this.router.navigate(["/post-list", 1]);
+      this.router.navigate(["/home"]);
     }
   }
 
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
     this.authenticationService.currentUser$.subscribe(
       (res) => {
         if (this.authenticationService.isLogin && res && res.isUserAuth) {
-          this.router.navigate(["/post-list", 1]);
+          this.router.navigate(["/home"]);
         }
         //this.loginError = res.error;
         //this.loginError = res.error;

@@ -13,12 +13,4 @@ namespace Solution.Data.Models
         public string PhoneArea { get; set; }
         public string PhoneNumber { get; set; }
     }
-    public class ExtendMember : Member
-    {
-        public string UserConnectinonId { get; set; }
-    }
-    public class ExtendMembers
-    {
-        public List<ExtendMember> Members { get; set; }
-    }
 }
